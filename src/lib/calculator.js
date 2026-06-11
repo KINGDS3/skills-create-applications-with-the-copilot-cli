@@ -31,4 +31,8 @@ function sqrt(a) {
   return Math.sqrt(a);
 }
 
-module.exports = { add, sub, mul, div, mod, pow, sqrt };
+function power(a, b) {
+  return pow(a, b);
+}
+
+module.exports = { add, sub, mul, div, mod, pow, power, sqrt };
