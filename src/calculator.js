@@ -6,19 +6,22 @@
 // - sub: subtraction
 // - mul: multiplication
 // - div: division
+// - mod: modulo
+// - pow: exponentiation (a ^ b)
+// - sqrt: square root (single operand)
 
-const { add, sub, mul, div } = require('./lib/calculator');
+const calc = require('./lib/calculator');
 const [,, op, aStr, bStr] = process.argv;
 function usage(){
-  console.error('Usage: node src/calculator.js <add|sub|mul|div> <num1> <num2>');
+  console.error('Usage: node src/calculator.js <add|sub|mul|div|mod|pow|sqrt> <num1> [num2]');
   process.exit(2);
 }
 
-if (!op || aStr === undefined || bStr === undefined) usage();
+if (!op || aStr === undefined) usage();
 
 const a = Number(aStr);
-const b = Number(bStr);
-if (Number.isNaN(a) || Number.isNaN(b)) {
+const b = bStr === undefined ? undefined : Number(bStr);
+if (Number.isNaN(a) || (bStr !== undefined && Number.isNaN(b))) {
   console.error('Error: operands must be valid numbers');
   process.exit(2);
 }
@@ -27,16 +30,32 @@ try {
   let result;
   switch (op) {
     case 'add':
-      result = add(a, b);
+      if (b === undefined) usage();
+      result = calc.add(a, b);
       break;
     case 'sub':
-      result = sub(a, b);
+      if (b === undefined) usage();
+      result = calc.sub(a, b);
       break;
     case 'mul':
-      result = mul(a, b);
+      if (b === undefined) usage();
+      result = calc.mul(a, b);
       break;
     case 'div':
-      result = div(a, b);
+      if (b === undefined) usage();
+      result = calc.div(a, b);
+      break;
+    case 'mod':
+      if (b === undefined) usage();
+      result = calc.mod(a, b);
+      break;
+    case 'pow':
+      if (b === undefined) usage();
+      result = calc.pow(a, b);
+      break;
+    case 'sqrt':
+      // sqrt uses only a
+      result = calc.sqrt(a);
       break;
     default:
       usage();

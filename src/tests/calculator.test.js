@@ -28,4 +28,25 @@ describe('Calculator basic operations', () => {
   test('negative numbers subtraction', () => {
     expect(calc.sub(-5, -3)).toBe(-2);
   });
+
+  // New operation tests
+  test('modulo: 10 % 3 = 1', () => {
+    expect(calc.mod(10, 3)).toBe(1);
+  });
+
+  test('modulo by zero throws', () => {
+    expect(() => calc.mod(5, 0)).toThrow('Modulo by zero');
+  });
+
+  test('exponentiation: 2 ** 8 = 256', () => {
+    expect(calc.pow(2, 8)).toBe(256);
+  });
+
+  test('square root: sqrt(25) = 5', () => {
+    expect(calc.sqrt(25)).toBe(5);
+  });
+
+  test('square root of negative throws', () => {
+    expect(() => calc.sqrt(-4)).toThrow('Square root of negative number');
+  });
 });
