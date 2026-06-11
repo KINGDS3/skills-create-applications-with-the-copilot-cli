@@ -7,6 +7,7 @@
 // - mul: multiplication
 // - div: division
 
+const { add, sub, mul, div } = require('./lib/calculator');
 const [,, op, aStr, bStr] = process.argv;
 function usage(){
   console.error('Usage: node src/calculator.js <add|sub|mul|div> <num1> <num2>');
@@ -22,26 +23,26 @@ if (Number.isNaN(a) || Number.isNaN(b)) {
   process.exit(2);
 }
 
-let result;
-switch (op) {
-  case 'add':
-    result = a + b;
-    break;
-  case 'sub':
-    result = a - b;
-    break;
-  case 'mul':
-    result = a * b;
-    break;
-  case 'div':
-    if (b === 0) {
-      console.error('Error: division by zero');
-      process.exit(1);
-    }
-    result = a / b;
-    break;
-  default:
-    usage();
+try {
+  let result;
+  switch (op) {
+    case 'add':
+      result = add(a, b);
+      break;
+    case 'sub':
+      result = sub(a, b);
+      break;
+    case 'mul':
+      result = mul(a, b);
+      break;
+    case 'div':
+      result = div(a, b);
+      break;
+    default:
+      usage();
+  }
+  console.log(result);
+} catch (err) {
+  console.error('Error:', err.message);
+  process.exit(1);
 }
-
-console.log(result);
