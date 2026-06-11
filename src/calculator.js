@@ -1,67 +1,75 @@
 #!/usr/bin/env node
 
-// Simple Node.js CLI calculator
-// Supported operations:
-// - add: addition
-// - sub: subtraction
-// - mul: multiplication
-// - div: division
-// - mod: modulo
-// - pow: exponentiation (a ^ b)
-// - sqrt: square root (single operand)
+/**
+ * Node.js CLI Calculator
+ * Supported operations:
+ * - addition
+ * - subtraction
+ * - multiplication
+ * - division
+ *
+ * Usage:
+ *   node src/calculator.js add 2 3
+ *   node src/calculator.js sub 5 2
+ *   node src/calculator.js mul 4 2.5
+ *   node/src/calculator.js div 10 4
+ */
 
-const calc = require('./lib/calculator');
-const [,, op, aStr, bStr] = process.argv;
-function usage(){
-  console.error('Usage: node src/calculator.js <add|sub|mul|div|mod|pow|sqrt> <num1> [num2]');
-  process.exit(2);
+function printUsage() {
+  console.error('Usage: node src/calculator.js <operation> <num1> <num2>');
+  console.error('Operations: add, sub, mul, div');
 }
 
-if (!op || aStr === undefined) usage();
-
-const a = Number(aStr);
-const b = bStr === undefined ? undefined : Number(bStr);
-if (Number.isNaN(a) || (bStr !== undefined && Number.isNaN(b))) {
-  console.error('Error: operands must be valid numbers');
-  process.exit(2);
-}
-
-try {
-  let result;
-  switch (op) {
-    case 'add':
-      if (b === undefined) usage();
-      result = calc.add(a, b);
-      break;
-    case 'sub':
-      if (b === undefined) usage();
-      result = calc.sub(a, b);
-      break;
-    case 'mul':
-      if (b === undefined) usage();
-      result = calc.mul(a, b);
-      break;
-    case 'div':
-      if (b === undefined) usage();
-      result = calc.div(a, b);
-      break;
-    case 'mod':
-      if (b === undefined) usage();
-      result = calc.mod(a, b);
-      break;
-    case 'pow':
-      if (b === undefined) usage();
-      result = calc.pow(a, b);
-      break;
-    case 'sqrt':
-      // sqrt uses only a
-      result = calc.sqrt(a);
-      break;
-    default:
-      usage();
+function toNumber(val) {
+  const n = Number(val);
+  if (Number.isNaN(n)) {
+    console.error(`Invalid number: ${val}`);
+    process.exit(1);
   }
-  console.log(result);
-} catch (err) {
-  console.error('Error:', err.message);
+  return n;
+}
+
+const [, , op, aStr, bStr] = process.argv;
+
+if (!op || !aStr || !bStr) {
+  printUsage();
   process.exit(1);
 }
+
+const a = toNumber(aStr);
+const b = toNumber(bStr);
+
+let result;
+switch (op) {
+  case 'add':
+  case '+':
+    // addition
+    result = a + b;
+    break;
+  case 'sub':
+  case '-':
+    // subtraction
+    result = a - b;
+    break;
+  case 'mul':
+  case 'x':
+  case '*':
+    // multiplication
+    result = a * b;
+    break;
+  case 'div':
+  case '/':
+    // division
+    if (b === 0) {
+      console.error('Error: Division by zero');
+      process.exit(1);
+    }
+    result = a / b;
+    break;
+  default:
+    console.error(`Unknown operation: ${op}`);
+    printUsage();
+    process.exit(1);
+}
+
+console.log(result);
